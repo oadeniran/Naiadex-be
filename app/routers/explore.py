@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api", tags=["explore"])
 @router.get("/explore", response_model=list[Submission])
 def explore(limit: int = 100):
     docs = (
-        submissions.find({"status": "finalized"}, {"media": 0, "gate": 0})
+        submissions.find({"status": "finalized", "deleted": {"$ne": True}}, {"media": 0, "gate": 0})
         .sort("finalized_at", -1)
         .limit(limit)
     )

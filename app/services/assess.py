@@ -354,7 +354,8 @@ def get_submission(submission_id: str) -> dict | None:
 
 def list_submissions(username: str | None = None, limit: int = 50) -> list[dict]:
     query = {"username": username} if username else {}
-    docs = submissions.find(query, {"media": 0, "deleted": 0}).sort("created_at", -1).limit(limit)
+    query["deleted"] = {"$ne": True}
+    docs = submissions.find(query, {"media": 0}).sort("created_at", -1).limit(limit)
     return [_to_public(d) for d in docs]
 
 
